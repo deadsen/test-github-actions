@@ -44,10 +44,8 @@ jobs:
           echo $DEPLOYMENT_TYPE
           echo ${{ inputs.deployment_type }}
           echo $DEPLOYMENTS > deployments.json
-          REGION=$(cat deployments.json | jq -r '.${{ env.DEPLOYMENT_TYPE }}.region') >> GITHUB_ENV
-          echo $REGION
-          echo REGION=$REGION >> GITHUB_ENV
-          echo TRAFFIC_ENABLED=$(cat deployments.json | jq -r '.${{ env.DEPLOYMENT_TYPE }}.traffic_enabled') >> GITHUB_ENV
+          echo "REGION=$(cat deployments.json | jq -r '.${{ env.DEPLOYMENT_TYPE }}.region')" >> GITHUB_ENV
+          echo "TRAFFIC_ENABLED=$(cat deployments.json | jq -r '.${{ env.DEPLOYMENT_TYPE }}.traffic_enabled')" >> GITHUB_ENV
 
       - name: Check deployment variables
         run: |
