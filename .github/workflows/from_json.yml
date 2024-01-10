@@ -47,7 +47,7 @@ jobs:
           DEPLOYMENTS_JSON: ${{ toJson(vars.DEPLOYMENTS) }}
         run: |
           echo $DEPLOYMENTS_JSON
-          echo REGION=$(jq -r '.vars.DEPLOYMENTS.${{ inputs.deployment_type}}.region' $GITHUB_EVENT_PATH) >> GITHUB_ENV
+          echo REGION=$(jq -r '.vars.DEPLOYMENTS.${{ inputs.deployment_type}}.region' <<< "${{ fromJson(env.DEPLOYMENTS_JSON) }}) >> GITHUB_ENV
           echo TRAFFIC_ENABLED=$(echo $DEPLOYMENTS_JSON | jq -r '.${{ inputs.deployment_type}}.traffic_enabled') >> GITHUB_ENV
 
       - name: Check deployment variables
