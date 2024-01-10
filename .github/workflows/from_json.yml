@@ -44,8 +44,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Test fromJSON
         env: 
-          REGION: ${{ fromJSON(vars.DEPLOYMENTS).inputs.deployment_type.region }}
-          TRAFFIC_ENABLED: ${{ fromJSON(vars.DEPLOYMENTS).inputs.deployment_type.traffic_enabled }}
+          REGION: ${{ format(fromJSON(vars.DEPLOYMENTS).{0}.region, inputs.deployment_type) }}
+          TRAFFIC_ENABLED:  ${{ format(fromJSON(vars.DEPLOYMENTS).{0}.traffic_enabled, inputs.deployment_type) }}
         run: |
           echo ${{ env.REGION }}
           echo $TRAFFIC_ENABLED
