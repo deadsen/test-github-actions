@@ -40,8 +40,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Set deployment variables
         run: |
-          echo $DEPLOYMENTS > deployments.json
-          cat deployments.json | jq -r '.${{ env.DEPLOYMENT_TYPE }}.traffic_enabled'
           echo "REGION=$(echo $DEPLOYMENTS | jq -r '.${{ env.DEPLOYMENT_TYPE }}.region')" >> $GITHUB_ENV
           echo "TRAFFIC_ENABLED=$(echo $DEPLOYMENTS | jq -r '.${{ env.DEPLOYMENT_TYPE }}.traffic_enabled')" >> $GITHUB_ENV
         
