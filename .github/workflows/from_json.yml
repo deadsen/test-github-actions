@@ -42,12 +42,15 @@ jobs:
         run: echo Hello, world!
 
       # Runs a set of commands using the runners shell
-      - name: Test fromJSON
+      - name: Set deployment variables
         env: 
-          REGION: ${{ format(fromJSON(vars.DEPLOYMENTS).{0}.region, inputs.deployment_type) }}
-          TRAFFIC_ENABLED:  ${{ format(fromJSON(vars.DEPLOYMENTS).{0}.traffic_enabled, inputs.deployment_type) }}
+          DEPLOYMENTS_JSON: toJSON(vars.DEPLOYMENTS)
+        run: |
+          echo REGION=$(echo $DEPLOYMENTS_JSON | jq -r .${{ inputs.deployment_type}}.region) >> GITHUB_ENV
+          echo TRAFFIC_ENABLED=$(echo $DEPLOYMENTS_JSON | jq -r .${{ inputs.deployment_type}}.traffic_enabled) >> GITHUB_ENV
+
+      - name: Check deployment variables
         run: |
           echo ${{ env.REGION }}
           echo $TRAFFIC_ENABLED
-
       
