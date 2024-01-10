@@ -44,10 +44,10 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Set deployment variables
         env: 
-          DEPLOYMENTS_JSON: ${{ fromJson(vars.DEPLOYMENTS) }}
+          DEPLOYMENTS_JSON: ${{ toJson(vars.DEPLOYMENTS) }}
         run: |
           echo $DEPLOYMENTS_JSON
-          echo REGION=$(echo $DEPLOYMENTS_JSON | jq -r '.${{ inputs.deployment_type}}.region') >> GITHUB_ENV
+          echo REGION=$(jq -r '.vars.DEPLOYMENTS.${{ inputs.deployment_type}}.region' $GITHUB_EVENT_PATH) >> GITHUB_ENV
           echo TRAFFIC_ENABLED=$(echo $DEPLOYMENTS_JSON | jq -r '.${{ inputs.deployment_type}}.traffic_enabled') >> GITHUB_ENV
 
       - name: Check deployment variables
