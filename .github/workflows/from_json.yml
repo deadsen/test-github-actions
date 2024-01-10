@@ -47,6 +47,9 @@ jobs:
           echo "REGION=$(cat deployments.json | jq -r '.${{ env.DEPLOYMENT_TYPE }}.region')" >> GITHUB_ENV
           cat deployments.json | jq -r '.primary.region'
           echo "TRAFFIC_ENABLED=$(cat deployments.json | jq -r '.${{ env.DEPLOYMENT_TYPE }}.traffic_enabled')" >> GITHUB_ENV
+
+          echo "VARIABLE=$(uname -a)" >> GITHUB_ENV
+          echo $VARIABLE
         
 
       - name: Check deployment variables
