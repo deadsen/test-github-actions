@@ -7,13 +7,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Select environment'
-        required: true
-        default: dev
-        type: choice
-        options:
-          - dev
       deployment_type:
         description: 'Select deployment_type'
         required: true
@@ -31,7 +24,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment: dev
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -45,7 +38,7 @@ jobs:
       - name: Set deployment variables
         env: 
           DEPLOYMENTS: ${{ vars.DEPLOYMENTS }}
-          DEPLOYMENT_TYPE: ${{ inputs.deployment_type }}
+          DEPLOYMENT_TYPE: ${{ inputs.deployment_type || 'primary'}}
         run: |
           echo $DEPLOYMENTS
           echo $DEPLOYMENT_TYPE
