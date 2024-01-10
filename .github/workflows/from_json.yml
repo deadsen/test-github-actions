@@ -44,7 +44,7 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Set deployment variables
         env: 
-          DEPLOYMENTS_JSON: ${{ vars.DEPLOYMENTS }}
+          DEPLOYMENTS_JSON: ${{ fromJson(vars.DEPLOYMENTS) }}
         run: |
           echo $DEPLOYMENTS_JSON
           echo REGION=$(echo $DEPLOYMENTS_JSON | jq -r '.${{ inputs.deployment_type}}.region') >> GITHUB_ENV
