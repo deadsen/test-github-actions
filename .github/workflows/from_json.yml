@@ -49,11 +49,11 @@ jobs:
           echo "TRAFFIC_ENABLED=$(cat deployments.json | jq -r '.${{ env.DEPLOYMENT_TYPE }}.traffic_enabled')" >> GITHUB_ENV
 
           echo "VARIABLE=$(uname -a)" >> GITHUB_ENV
-          echo $VARIABLE
         
 
       - name: Check deployment variables
         run: |
           echo ${{ env.REGION }}
           echo $TRAFFIC_ENABLED
+          echo ${{ env.VARIABLE }}
       
