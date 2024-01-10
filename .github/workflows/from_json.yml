@@ -14,6 +14,14 @@ on:
         type: choice
         options:
           - dev
+      deployment_type:
+        description: 'Select deployment_type'
+        required: true
+        default: primary
+        type: choice
+        options:
+          - primary
+          - secondary
   push:
     branches: 
      - main
@@ -36,8 +44,8 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Test fromJSON
         env: 
-          REGION: ${{ fromJSON(vars.DEPLOYMENTS).primary.region }}
-          TRAFFIC_ENABLED: ${{ fromJSON(vars.DEPLOYMENTS).primary.traffic_enabled }}
+          REGION: ${{ fromJSON(vars.DEPLOYMENTS).${{ inputs.deployment_type }}.region }}
+          TRAFFIC_ENABLED: ${{ fromJSON(vars.DEPLOYMENTS).${{ inputs.deployment_type }}.traffic_enabled }}
         run: |
           echo ${{ env.REGION }}
           echo $TRAFFIC_ENABLED
