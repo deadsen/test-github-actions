@@ -17,8 +17,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - deployment_type: primary
-          - deployment_type: secondary
+          - deployment_type: first
+          - deployment_type: second
     with:
       deployment_type: ${{ matrix.deployment_type }}
     secrets: inherit
