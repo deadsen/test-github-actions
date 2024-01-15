@@ -71,5 +71,5 @@ jobs:
           
       - name: Check regional variables
         run: |
-          echo AWS_REGION = ${{ steps.set_region.outputs.aws_region }}
-          echo TRAFFIC_ENABLED = ${{ steps.set_region.outputs.traffic_enabled }}
+          echo AWS_REGION = ${{ steps.set_region_vars.outputs.aws_region }}
+          echo TRAFFIC_ENABLED = ${{ steps.set_region_vars.outputs.traffic_enabled }}
