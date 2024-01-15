@@ -52,24 +52,24 @@ jobs:
           echo TRAFFIC_ENABLED = ${{ env.TRAFFIC_ENABLED }}
 
       - name: Set regional variables
-        id: set_region
+        id: set_region_vars
         run: |
-          aws_region=${{ vars[format('{0}_REGION', inputs.deployment_type)] }}
-          traffic_enabled=${{ vars[format('{0}_TRAFFIC_ENABLED', inputs.deployment_type)] }}
+          AWS_REGION=${{ vars[format('{0}_REGION', inputs.deployment_type)] }}
+          TRAFFIC_ENABLED=${{ vars[format('{0}_TRAFFIC_ENABLED', inputs.deployment_type)] }}
 
-          if [ -z $aws_region ];then
+          if [ -z $AWS_REGION ];then
             echo "Please ensure that all variables with _REGION prefix is set in GitHub"
             exit 1
-          elif [ -z $traffic_enabled ];then
+          elif [ -z $TRAFFIC_ENABLED ];then
             echo "Please ensure that all variables with _TRAFFIC_ENABLED prefix is set in GitHub"
             exit 1
           else
             # Set GitHub outputs
-            echo "AWS_REGION=$aws_region" >> $GITHUB_OUTPUT
-            echo "TRAFFIC_ENABLED=$traffic_enabled" >> $GITHUB_OUTPUT
+            echo "aws_region=$AWS_REGION" >> $GITHUB_OUTPUT
+            echo "traffic_enabled=$TRAFFIC_ENABLED" >> $GITHUB_OUTPUT
           fi
           
       - name: Check regional variables
         run: |
-          echo AWS_REGION = ${{ steps.set_region.outputs.AWS_REGION }}
-          echo TRAFFIC_ENABLED = ${{ steps.set_region.outputs.TRAFFIC_ENABLED }}
+          echo AWS_REGION = ${{ steps.set_region.outputs.aws_region }}
+          echo TRAFFIC_ENABLED = ${{ steps.set_region.outputs.traffic_enabled }}
