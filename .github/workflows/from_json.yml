@@ -15,15 +15,23 @@ on:
         options:
           - primary
           - secondary
+      failover:
+        type: boolean
+        required: false
+        default: false
   workflow_call:
     inputs:
       deployment_type:
         required: true
         type: string
+      failover:
+        type: boolean
+        required: false
+        default: false
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  build-and-failover:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     environment: dev
@@ -73,3 +81,20 @@ jobs:
         run: |
           echo AWS_REGION = ${{ steps.set_region_vars.outputs.aws_region }}
           echo TRAFFIC_ENABLED = ${{ steps.set_region_vars.outputs.traffic_enabled }}
+
+  not_failover:
+    if: ${{ ! inputs.failover }}
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    environment: dev
+    env: 
+      DEPLOYMENTS: ${{ vars.DEPLOYMENTS }}
+      DEPLOYMENT_TYPE: ${{ inputs.deployment_type || 'primary'}}
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!
