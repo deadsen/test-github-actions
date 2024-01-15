@@ -54,8 +54,8 @@ jobs:
       - name: Set regional variables
         id: set_region
         run: |
-          aws_region=${{ vars.[format('{0}_REGION', inputs.deployment_type)] }}
-          traffic_enabled=${{ vars.[format('{0}_TRAFFIC_ENABLED', inputs.deployment_type)] }}
+          aws_region=${{ vars[format('{0}_REGION', inputs.deployment_type)] }}
+          traffic_enabled=${{ vars[format('{0}_TRAFFIC_ENABLED', inputs.deployment_type)] }}
 
           if [ -z $aws_region ] || ;then
             echo "Please ensure that all variables with _REGION prefix is set in GitHub"
