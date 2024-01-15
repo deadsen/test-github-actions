@@ -65,11 +65,11 @@ jobs:
             exit 1
           else
             # Set GitHub outputs
-            echo "AWS_REGION=$aws_region" >> GITHUB_OUTPUT
-            echo "TRAFFIC_ENABLED=$traffic_enabled" >> GITHUB_OUTPUT
+            echo "AWS_REGION=$aws_region" >> $GITHUB_OUTPUT
+            echo "TRAFFIC_ENABLED=$traffic_enabled" >> $GITHUB_OUTPUT
           fi
           
       - name: Check regional variables
         run: |
           echo AWS_REGION = ${{ steps.set_region.outputs.AWS_REGION }}
-          echo TRAFFIC_ENABLED = ${{ steps.set_region.outputs.AWS_REGION }}
+          echo TRAFFIC_ENABLED = ${{ steps.set_region.outputs.TRAFFIC_ENABLED }}
