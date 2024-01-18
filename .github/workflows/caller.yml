@@ -22,6 +22,7 @@ jobs:
     uses: ./.github/workflows/cd.yml
     needs: [ci]
     strategy:
+      max-parallel: 1
       matrix:
         include:
           - deployment_type: primary
