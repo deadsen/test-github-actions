@@ -13,7 +13,14 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   ci:
-    uses: ./.github/workflows/from_json.yml
+    uses: ./.github/workflows/cш.yml
+    with:
+      deployment_type: primary
+    secrets: inherit
+    
+  cd:
+    uses: ./.github/workflows/cd.yml
+    needs: [ci]
     strategy:
       matrix:
         include:
