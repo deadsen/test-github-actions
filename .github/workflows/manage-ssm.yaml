@@ -36,7 +36,7 @@ jobs:
             echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
             echo "AWS_REGION=${{ vars.PRIMARY_REGION }}"  >> $GITHUB_OUTPUT
           elif [ "${{ inputs.environment }}" == "dev-west" ]; then
-            echo "ENVIRONMENT=qa" >> $GITHUB_OUTPUT
+            echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
             echo "AWS_REGION=${{ vars.SECONDARY_REGION }}"  >> $GITHUB_OUTPUT
           elif [ "${{ inputs.environment }}" == "qa" ]; then
             echo "ENVIRONMENT=qa" >> $GITHUB_OUTPUT
@@ -53,7 +53,7 @@ jobs:
     needs: Set-variables
     env:
       AWS_REGION: ${{ needs.Set-variables.outputs.AWS_REGION }}
-      PARAMETER_NAME: '/${{ vars.ENVIRONMENT }}/${{ needs.Set-variables.outputs.PARAMETER_NAME }}'
+      PARAMETER_NAME: '/${{ needs.Set-variables.outputs.ENVIRONMENT }}/${{ needs.Set-variables.outputs.PARAMETER_NAME }}'
     permissions:
       id-token: write
       contents: read
