@@ -33,7 +33,7 @@ jobs:
 
           if [ "${{ inputs.environment }}" == "dev-east" ]; then
             echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
-          elif [ "${{ inputs.environment }}" == "dev-east" ]; then
+          elif [ "${{ inputs.environment }}" == "dev-west" ]; then
             echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
           else 
             echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_OUTPUT
@@ -55,7 +55,7 @@ jobs:
         run: |
           if [ "${{ inputs.environment }}" == "dev-eastt" ]; then
             echo "AWS_REGION=${{ vars.PRIMARY_REGION }}"  >> $GITHUB_ENV
-          elif [ "${{ inputs.environment }}" == "dev-east" ]; then
+          elif [ "${{ inputs.environment }}" == "dev-west" ]; then
             echo "AWS_REGION=${{ vars.SECONDARY_REGION }}" >> $GITHUB_ENV
           else
             echo "AWS_REGION=${{ vars.PRIMARY_REGION }}"  >> $GITHUB_ENV
