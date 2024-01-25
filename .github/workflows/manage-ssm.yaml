@@ -31,15 +31,15 @@ jobs:
         run: |
           package_name=$(cat ./package.json | jq -r '.name')
 
-          if [ "${{ inputs.environment }}" == dev-east" ]; then
-            echo "ENVIRONMENT=prod-na" >> $GITHUB_OUTPUT
+          if [ "${{ inputs.environment }}" == "dev-east" ]; then
+            echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
           elif [ "${{ inputs.environment }}" == "dev-east" ]; then
-            echo "ENVIRONMENT=prod-na" >> $GITHUB_OUTPUT
+            echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
           else 
             echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_OUTPUT
           fi
 
-          echo "PARAMETER_NAME=mercury/$package_name" >> $GITHUB_OUTPUT
+          echo "PARAMETER_NAME=test/$package_name" >> $GITHUB_OUTPUT
 
   Add-Update-SSM:
     runs-on: ubuntu-latest
