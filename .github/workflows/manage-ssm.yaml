@@ -1,0 +1,74 @@
+name: Manage-SSM-ADD-Update
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select environment.'
+        required: true
+        type: choice
+        options:
+          - dev-east
+          - dev-west
+          - qa
+          - prod
+      value:
+        description: 'Paste a JSON.'
+        required: true
+        type: string
+
+jobs:
+  Set-variables:
+    runs-on: ubuntu-latest
+    outputs:
+      ENVIRONMENT: ${{ steps.set_env.outputs.ENVIRONMENT }}
+      PARAMETER_NAME: ${{ steps.set_env.outputs.PARAMETER_NAME }}
+      AWS_REGION: ${{ steps.set_env.outputs.AWS_REGION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Determine of ENVIRONMENT
+        id: set_env
+        run: |
+          package_name=$(cat ./package.json | jq -r '.name')
+
+          if [ "${{ inputs.environment }}" == "dev-east" ]; then
+            echo "ENVIRONMENT=dev" >> $GITHUB_OUTPUT
+            echo "AWS_REGION=${{ vars.PRIMARY_REGION }}"  >> $GITHUB_OUTPUT
+          elif [ "${{ inputs.environment }}" == "dev-west" ]; then
+            echo "ENVIRONMENT=qa" >> $GITHUB_OUTPUT
+            echo "AWS_REGION=${{ vars.SECONDARY_REGION }}"  >> $GITHUB_OUTPUT
+          elif [ "${{ inputs.environment }}" == "qa" ]; then
+            echo "ENVIRONMENT=qa" >> $GITHUB_OUTPUT
+            echo "AWS_REGION=${{ vars.PRIMARY_REGION }}"  >> $GITHUB_OUTPUT
+          elif [ "${{ inputs.environment }}" == "prod-APAC" ]; then
+            echo "ENVIRONMENT=prod-apac" >> $GITHUB_OUTPUT
+            echo "AWS_REGION=${{ vars.PRIMARY_REGION }}"  >> $GITHUB_OUTPUT
+          fi
+
+          echo "PARAMETER_NAME=mercury/$package_name" >> $GITHUB_OUTPUT
+
+  Add-Update-SSM:
+    runs-on: ubuntu-latest
+    needs: Set-variables
+    env:
+      AWS_REGION: ${{ needs.Set-variables.outputs.AWS_REGION }}
+      PARAMETER_NAME: '/${{ vars.ENVIRONMENT }}/${{ needs.Set-variables.outputs.PARAMETER_NAME }}'
+    permissions:
+      id-token: write
+      contents: read
+    environment: ${{ needs.Set-variables.outputs.ENVIRONMENT }}
+    steps:
+
+      - name: Mask Input Value
+        run: |
+          VALUE=$(jq -r '.inputs.value' $GITHUB_EVENT_PATH )
+          echo ::add-mask::$VALUE
+          echo VALUE=$VALUE >> $GITHUB_ENV
+
+      - name: Add/Update SSM Parameters
+        run: |
+          echo "$VALUE" | jq -r > value.json
+          cat value.json
+          echo ${{ env.AWS_REGION }}
+          echo ${{ env.PARAMETER_NAME }}
