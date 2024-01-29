@@ -46,3 +46,13 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+          
+      - name: Default step
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
+
+      - name: Multi-region step
+        if: ${{ fromJson(vars.TF_MULTI_REGION) }}
+        run: |
+          echo ${{ vars.TF_MULTI_REGION }}
