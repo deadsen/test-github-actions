@@ -53,6 +53,6 @@ jobs:
           echo test, and deploy your project.
 
       - name: Multi-region step
-        if: ${{ fromJson(vars.TF_MULTI_REGION) }}
+        if:  ${{ vars.TF_MULTI_REGION }} == 'true'
         run: |
           echo ${{ vars.TF_MULTI_REGION }}
