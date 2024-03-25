@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       deployment_type:
-        description: 'Select deployment_type'
+        description: "Select deployment_type"
         required: true
         default: primary
         type: choice
@@ -18,22 +18,21 @@ on:
           - secondary
   workflow_call:
     inputs:
+      environment:
+        required: true
+        type: string
       deployment_type:
         required: true
         type: string
 
-concurrency:
-  group: ci-${{ inputs.deployment_type }}
-  cancel-in-progress: true
-  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: dev
-    env: 
+    environment: ${{ inputs.environment }}
+    env:
       DEPLOYMENTS: ${{ vars.DEPLOYMENTS }}
       DEPLOYMENT_TYPE: ${{ inputs.deployment_type || 'primary'}}
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -50,13 +49,13 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
-          
+
       - name: Default step
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
 
       - name: Multi-region step
-        if:  ${{ vars.TF_MULTI_REGION == 'true' }}
+        if: ${{ vars.TF_MULTI_REGION == 'true' }}
         run: |
           echo ${{ vars.TF_MULTI_REGION }}

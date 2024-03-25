@@ -8,26 +8,21 @@ on:
   workflow_dispatch:
     inputs:
       deployment_type:
-        description: 'Select deployment_type'
+        description: "Select deployment_type"
         required: true
         default: primary
         type: choice
         options:
           - primary
           - secondary
-      failover:
-        type: boolean
-        required: false
-        default: false
   workflow_call:
     inputs:
+      environment:
+        required: true
+        type: string
       deployment_type:
         required: true
         type: string
-      failover:
-        type: boolean
-        required: false
-        default: false
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -35,8 +30,8 @@ jobs:
   deploy_app:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    environment: dev
-    env: 
+    environment: ${{ inputs.environment }}
+    env:
       DEPLOYMENTS: ${{ vars.DEPLOYMENTS }}
       DEPLOYMENT_TYPE: ${{ inputs.deployment_type || 'primary'}}
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -53,7 +48,6 @@ jobs:
         run: |
           echo "REGION=$(echo $DEPLOYMENTS | jq -r '.${{ env.DEPLOYMENT_TYPE }}.region')" >> $GITHUB_ENV
           echo "TRAFFIC_ENABLED=$(echo $DEPLOYMENTS | jq -r '.${{ env.DEPLOYMENT_TYPE }}.traffic_enabled')" >> $GITHUB_ENV
-        
 
       - name: Check deployment variables
         run: |
@@ -77,9 +71,8 @@ jobs:
             echo "aws_region=$AWS_REGION" >> $GITHUB_OUTPUT
             echo "traffic_enabled=$TRAFFIC_ENABLED" >> $GITHUB_OUTPUT
           fi
-          
+
       - name: Check regional variables
         run: |
           echo AWS_REGION = ${{ steps.set_region_vars.outputs.aws_region }}
           echo TRAFFIC_ENABLED = ${{ steps.set_region_vars.outputs.traffic_enabled }}
-
