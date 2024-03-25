@@ -11,6 +11,11 @@ on:
   push:
     branches:
       - main
+
+concurrency:
+  group: caller-primary
+  cancel-in-progress: false
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -23,12 +28,6 @@ jobs:
   cd:
     uses: ./.github/workflows/cd.yml
     needs: [ci]
-    strategy:
-      max-parallel: 1
-      matrix:
-        include:
-          - deployment_type: primary
-          - deployment_type: secondary
     with:
-      deployment_type: ${{ matrix.deployment_type }}
+      deployment_type: primary
     secrets: inherit
