@@ -33,7 +33,7 @@ jobs:
   # This workflow contains a single job called "build"
   deploy_app:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, deadsen, Linux]
+    runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
       DEPLOYMENTS: ${{ vars.DEPLOYMENTS }}
