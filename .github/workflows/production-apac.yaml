@@ -22,10 +22,18 @@ jobs:
       deployment_type: primary
     secrets: inherit
 
-  cd:
+  cd-primary:
     uses: ./.github/workflows/cd.yml
     needs: [ci]
     with:
       environment: prod-apac
       deployment_type: primary
+    secrets: inherit
+
+  cd-secondary:
+    uses: ./.github/workflows/cd.yml
+    needs: [ci]
+    with:
+      environment: prod-apac
+      deployment_type: secondary
     secrets: inherit
